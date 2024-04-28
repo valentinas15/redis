@@ -1,4 +1,4 @@
-# Changelog
+# Changelog 
 
 All changes to phpredis will be documented in this file.
 
