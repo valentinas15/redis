@@ -226,35 +226,6 @@ jobs:
           TEST_PHP_ARGS: -e
           USE_ZEND_ALLOC: 0
 
-  macos:
-    runs-on: macos-latest
-    continue-on-error: false
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Install PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: json, :redis
-          coverage: none
-          tools: none
-      - name: Install dependencies
-        run: |
-          pecl install igbinary
-          pecl install msgpack
-      - name: Build phpredis
-        run: |
-          phpize
-          ./configure --enable-redis-lzf --enable-redis-zstd --enable-redis-igbinary --enable-redis-msgpack --enable-redis-lz4 --with-liblz4
-          sudo make install
-          echo 'extension = redis.so' | sudo tee -a "$(php --ini | grep 'Scan for additional .ini files' | awk '{print $7}')/90-redis.ini"
 
   windows:
     runs-on: windows-latest
@@ -262,7 +233,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
+        php: [ '8.2', '8.3']
         ts: [nts, ts]
     steps:
       - name: Checkout
